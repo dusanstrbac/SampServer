@@ -1,0 +1,9 @@
+*.amx
+*.log
+*.rec
+/plugins/
+/dependencies/
+server_log.txt
+samp-server.exe
+announce.exe
+samp-npc.exe

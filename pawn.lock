@@ -1,0 +1,155 @@
+{
+	"version": 1,
+	"generated": "2026-04-25T16:33:56.9868703Z",
+	"sampctl_version": "",
+	"dependencies": {
+		"github.com/Southclaws/formatex": {
+			"constraint": ":1.0.0",
+			"resolved": "1.0.0",
+			"commit": "77989a56cca20d1549de542ae57c2d2d7ef7fb46",
+			"integrity": "commit:77989a56cca20d1549de542ae57c2d2d7ef7fb46",
+			"site": "github.com",
+			"user": "Southclaws",
+			"repo": "formatex"
+		},
+		"github.com/Southclaws/zcmd": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "1ab0082e316de399f4d061f5caca85a1630f2427",
+			"integrity": "commit:1ab0082e316de399f4d061f5caca85a1630f2427",
+			"site": "github.com",
+			"user": "Southclaws",
+			"repo": "zcmd"
+		},
+		"github.com/Y-Less/code-parse.inc": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "c37e249e17ee6618e0c8004da7763ae555fbfeaa",
+			"integrity": "commit:c37e249e17ee6618e0c8004da7763ae555fbfeaa",
+			"site": "github.com",
+			"user": "Y-Less",
+			"repo": "code-parse.inc"
+		},
+		"github.com/Y-Less/indirection": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "06f39798230056372fde0c7392a0d2456e5b150c",
+			"integrity": "commit:06f39798230056372fde0c7392a0d2456e5b150c",
+			"site": "github.com",
+			"user": "Y-Less",
+			"repo": "indirection"
+		},
+		"github.com/Zeex/amx_assembly": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "66ca1f13ffb83923cdba3e6ad2855a516d484ee6",
+			"integrity": "commit:66ca1f13ffb83923cdba3e6ad2855a516d484ee6",
+			"site": "github.com",
+			"user": "Zeex",
+			"repo": "amx_assembly"
+		},
+		"github.com/karimcambridge/SAMP-foreach": {
+			"constraint": ":v19.1",
+			"resolved": "v19.1",
+			"commit": "dda1f8b98105ac5dd443e9d4dfb5fd6aa4477034",
+			"integrity": "commit:dda1f8b98105ac5dd443e9d4dfb5fd6aa4477034",
+			"site": "github.com",
+			"user": "karimcambridge",
+			"repo": "SAMP-foreach"
+		},
+		"github.com/oscar-broman/md-sort": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "65c72b6685576ee7e5a6102406970c2f9ef04980",
+			"integrity": "commit:65c72b6685576ee7e5a6102406970c2f9ef04980",
+			"site": "github.com",
+			"user": "oscar-broman",
+			"repo": "md-sort"
+		},
+		"github.com/pBlueG/SA-MP-MySQL": {
+			"constraint": ":R41",
+			"resolved": "R41",
+			"commit": "d0a9b3de4c87c4269777a271ad4f7680730f98d8",
+			"integrity": "commit:d0a9b3de4c87c4269777a271ad4f7680730f98d8",
+			"site": "github.com",
+			"user": "pBlueG",
+			"repo": "SA-MP-MySQL"
+		},
+		"github.com/pawn-lang/YSI-Includes": {
+			"constraint": ":v5.10.0006",
+			"resolved": "v5.10.0006",
+			"commit": "93a5e330815a8d4fd97bfeb9ed594c1f9a5db62f",
+			"integrity": "commit:93a5e330815a8d4fd97bfeb9ed594c1f9a5db62f",
+			"site": "github.com",
+			"user": "pawn-lang",
+			"repo": "YSI-Includes"
+		},
+		"github.com/pawn-lang/pawn-stdlib": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "e96507d9a6ddaae5bb0f3ec31479ba805aeff964",
+			"integrity": "commit:e96507d9a6ddaae5bb0f3ec31479ba805aeff964",
+			"site": "github.com",
+			"user": "pawn-lang",
+			"repo": "pawn-stdlib"
+		},
+		"github.com/pawn-lang/samp-stdlib": {
+			"constraint": ":0.3.7-R2-2-1",
+			"resolved": "0.3.7-R2-1-1",
+			"commit": "7b194986946f64e8c0a4d4223aafec704ffd6b88",
+			"integrity": "commit:7b194986946f64e8c0a4d4223aafec704ffd6b88",
+			"site": "github.com",
+			"user": "pawn-lang",
+			"repo": "samp-stdlib"
+		},
+		"github.com/samp-incognito/samp-streamer-plugin": {
+			"constraint": ":v2.9.6",
+			"resolved": "v2.9.6",
+			"commit": "afca207b148da6e0dea03693042a1e9665457403",
+			"integrity": "commit:afca207b148da6e0dea03693042a1e9665457403",
+			"site": "github.com",
+			"user": "samp-incognito",
+			"repo": "samp-streamer-plugin"
+		},
+		"github.com/sampctl/samp-stdlib": {
+			"constraint": "",
+			"resolved": "HEAD",
+			"commit": "8ffb055624308b25521665b60e78b5e6e6b3717f",
+			"integrity": "commit:8ffb055624308b25521665b60e78b5e6e6b3717f",
+			"site": "github.com",
+			"user": "sampctl",
+			"repo": "samp-stdlib"
+		}
+	},
+	"runtime": {
+		"version": "0.3.7",
+		"platform": "windows",
+		"runtime_type": "",
+		"files": [
+			{
+				"path": "announce.exe",
+				"size": 40960,
+				"hash": "2a0270ee3766ff09dfcb2aa70316c4076c6c713154784c9b324509d66c019a26",
+				"mode": 438
+			},
+			{
+				"path": "samp-npc.exe",
+				"size": 282624,
+				"hash": "a6d912e93d0b3569bd228106e678c46227c90faf360b6fee24b9027b021605e7",
+				"mode": 438
+			},
+			{
+				"path": "samp-server.exe",
+				"size": 950272,
+				"hash": "62f846ce73ec301125c2eb896cf24ce6a5d02c0be6e897cdd358bc84287fe320",
+				"mode": 438
+			}
+		]
+	},
+	"build": {
+		"compiler_preset": "samp",
+		"entry": "main.pwn",
+		"output": "gamemodes/main.amx",
+		"output_hash": "sha256:e79dd41fa5234fe20db2701f71921eb6de0e7a589679ee3ad519d788489fa896"
+	}
+}

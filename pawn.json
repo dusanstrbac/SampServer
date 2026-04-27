@@ -1,0 +1,22 @@
+{
+    "user": "DusanStrbac",
+    "repo": "Server",
+    "entry": "main.pwn",
+    "output": "gamemodes/main.amx",
+    "dependencies": [
+        "Southclaws/formatex",
+        "pawn-lang/YSI-Includes@v5.10.0006",
+        "pBlueG/SA-MP-MySQL@R41-4",
+        "Southclaws/zcmd",
+        "samp-incognito/samp-streamer-plugin@v2.9.6",
+        "pawn-lang/samp-stdlib",
+        "Y-Less/sscanf@v2.11.4"
+    ],
+    "runtime": {
+        "plugins": [
+            "mysql",
+            "sscanf",
+            "streamer"
+        ]
+    }
+}
