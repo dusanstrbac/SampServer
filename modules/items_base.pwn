@@ -38,8 +38,6 @@ enum ItemInfo {
 #define ITEM_BIZNIS_KARTA                                   "Biznis kartica"
 
 
-
-
 new const ServerItems[][ItemInfo] = {
     {ITEM_SOK, CENA_SOK, HEAL_SOK, 1},
     {ITEM_HLEB, CENA_HLEB, HEAL_HLEB, 1},

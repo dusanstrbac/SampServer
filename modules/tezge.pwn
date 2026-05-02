@@ -1,5 +1,3 @@
-#include <YSI_Coding\y_hooks>
-
 enum tezgaData {
     tID,
     tTip,
@@ -20,7 +18,7 @@ hook OnGameModeInit()
     return 1;
 }
 
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+hook OnDialogResponse@Tezge(playerid, dialogid, response, listitem, inputtext[])
 {
     if(dialogid == D_PIJACA_RANAC)
     {

@@ -4,16 +4,17 @@
     "entry": "main.pwn",
     "output": "gamemodes/main.amx",
     "dependencies": [
-        "Southclaws/formatex",
-        "pawn-lang/YSI-Includes@v5.10.0006",
-        "pBlueG/SA-MP-MySQL@R41-4",
-        "Southclaws/zcmd",
-        "samp-incognito/samp-streamer-plugin@v2.9.6",
         "pawn-lang/samp-stdlib",
-        "Y-Less/sscanf@v2.11.4"
+        "Southclaws/formatex",
+        "pawn-lang/YSI-Includes",
+        "pBlueG/SA-MP-MySQL",
+        "Southclaws/zcmd",
+        "samp-incognito/samp-streamer-plugin",
+        "Y-Less/sscanf:v2.11.4"
     ],
     "runtime": {
         "plugins": [
+            "crashdetect",
             "mysql",
             "sscanf",
             "streamer"

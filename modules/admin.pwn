@@ -1,3 +1,26 @@
+hook OnPlayerDisconnect(playerid, reason)
+{
+    if(Igrac[playerid][AdminDuty]) 
+    {
+        Igrac[playerid][AdminDuty] = false;
+        SacuvajIgraca(playerid);
+    }
+    return 1;
+}
+
+hook OnGameModeExit()
+{
+    foreach(new i : Player)
+    {
+        if(Igrac[i][AdminDuty]) 
+        {
+            Igrac[i][AdminDuty] = false;
+            SacuvajIgraca(i);
+        }
+    }
+    return 1;
+}
+
 stock ProveriAdminDuznost(playerid)
 {
     if(Igrac[playerid][AdminDuty] == false)
@@ -34,6 +57,18 @@ stock LogAdminAction(adminid, targetid, const action[], const reason[])
     return 1;
 }
 
+stock LiveAdminLog(boja, const poruka[])
+{
+    foreach(new i : Player)
+    {
+        if(Igrac[i][Admin] >= 1)
+        {
+            SendClientMessage(i, boja, poruka);
+        }
+    }
+    return 1;
+}
+
 forward OnAdminLogsLoad(playerid);
 public OnAdminLogsLoad(playerid)
 {
@@ -59,7 +94,7 @@ public OnAdminLogsLoad(playerid)
     return 1;
 }
 
-CMD:asultan(playerid, params[])
+CMD:aveh(playerid, params[])
 {
     if(!AdminProvera(playerid, 1)) return 1;
     if(!ProveriAdminDuznost(playerid)) return 1;
@@ -95,8 +130,12 @@ CMD:afix(playerid, params[])
     SetVehicleHealth(vehid, 1000.0);
     RepairVehicle(vehid);
     SendClientMessage(playerid, -1, "{FF0000}[Admin]: {FFFFFF}Vozilo je uspesno popravljeno.");
-    LogAdminAction(playerid, INVALID_PLAYER_ID, "Popravka vozila (/afix)", "N/A");
     return 1;
+}
+
+CMD:vfix(playerid, params[])
+{
+    return cmd_afix(playerid, params);
 }
 
 CMD:goto(playerid, params[])
@@ -229,11 +268,11 @@ CMD:aslap(playerid, params[])
     SetPlayerPos(targetid, x, y, z + 5.0);
 
     new str[128];
-    format(str, sizeof(str), "{FF0000}[Server Info]: {FFFFFF}Administrator %s vas je osamario. Razlog: %s", Igrac[playerid][ImeIgraca], razlog);
+    format(str, sizeof(str), "{FF0000}[ Server | Info ]: {FFFFFF}Administrator %s vas je osamario. Razlog: %s", Igrac[playerid][ImeIgraca], razlog);
     SendClientMessage(targetid, -1, str);
 
-    format(str, sizeof(str), "{FF0000}[Admin System]: {FFFFFF}Osamarili ste igraca %s. Razlog: %s", Igrac[targetid][ImeIgraca], razlog);
-    SendClientMessage(playerid, -1, str);
+    format(str, sizeof(str), "{FF0000}[ Admin System | Info ]: {FFFFFF}Osamarili ste igraca %s. Razlog: %s", Igrac[targetid][ImeIgraca], razlog);
+    SendClientMessage(playerid, ADMIN_BOJA, str);
     LogAdminAction(playerid, targetid, "Slap", razlog);
     return 1;
 }
@@ -256,22 +295,61 @@ CMD:ac(playerid, params[])
     return 1;
 }
 
+CMD:srestart(playerid, params[])
+{
+    if(!AdminProvera(playerid, 5)) return 1;
+    foreach(new i : Player)
+    {
+        if(Igrac[i][LoggedIn])
+        {
+            SacuvajIgraca(i);
+            SacuvajBanku(i);
+        }
+    }
+    print("SISTEM: Svi podaci su uspesno sacuvani. Restartovanje...");
+    SendRconCommand("gmx");
+    return 1;
+}
+
+CMD:dajnovac(playerid, params[])
+{
+    new targetid, amount;
+    if(!AdminProvera(playerid, 1)) return 1;
+    if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, ADMIN_BOJA, "[ Adimn System | Info ]Koristi: /dajnovac [ID Igraca] [Iznos]");
+    if(targetid == INVALID_PLAYER_ID) return SendClientMessage(playerid, ERROR_BOJA, "[ Admin System | Greska ] Igrac nije na serveru.");
+    if(amount <= 0) return SendClientMessage(playerid, ERROR_BOJA, "[ Admin System | Greska ] Iznos mora biti veci od 0.");
+
+    GivePlayerMoney(targetid, amount);
+    new str[128];
+    format(str, sizeof(str), "{FF0000}[ Admin System | Info]: {FFFFFF}Dali ste igracu %s %d$", Igrac[targetid][ImeIgraca], amount);
+    SendClientMessage(playerid, ADMIN_BOJA, str);
+
+    format(str, sizeof(str), "{FF0000}[ Server | Info]: {FFFFFF}Administrator %s vam je dao %d$", Igrac[playerid][ImeIgraca], amount);
+    SendClientMessage(targetid, -1, str);
+
+    new kolicina[12];
+    format(kolicina, sizeof(kolicina), "%d", amount);
+    LogAdminAction(playerid, targetid, "Daj novac (/dajnovac)", kolicina);
+    SacuvajIgraca(targetid);
+    return 1;
+}
+
 CMD:ajail(playerid, params[])
 {
     if(!AdminProvera(playerid, 3)) return 1;
     if(!ProveriAdminDuznost(playerid)) return 1;
 
     new targetid, vreme, razlog[64];
-    if(sscanf(params, "uiS(Bez razloga)[64]", targetid, vreme, razlog)) return SendClientMessage(playerid, -1, "{AAAAAA}Koristi: /ajail [ID] [Minuti] [Razlog]");    
-    if(targetid == INVALID_PLAYER_ID) return SendClientMessage(playerid, -1, "{FF0000}[Greska]: {FFFFFF}Igrac nije na serveru.");
-    if(vreme < 1 || vreme > 3000) return SendClientMessage(playerid, -1, "[Admin System] Vreme mora biti izmeju 1 i 3000 minuta");
+    if(sscanf(params, "uiS(Bez razloga)[64]", targetid, vreme, razlog)) return SendClientMessage(playerid, ADMIN_BOJA, "[ Admin System | Info ]: Koristi: /ajail [ID] [Minuti] [Razlog]");    
+    if(targetid == INVALID_PLAYER_ID) return SendClientMessage(playerid, ERROR_BOJA, "{FF0000}[ Admin System | Greska ]: {FFFFFF}Igrac nije na serveru.");
+    if(vreme < 1 || vreme > 3000) return SendClientMessage(playerid, ERROR_BOJA, "{FF0000}[ Admin System | Greska ]: {FFFFFF}Vreme mora biti izmeju 1 i 3000 minuta");
 
     Igrac[targetid][ZatvorVreme] = vreme * 60;
     SetPlayerPos(targetid, 197.6661, 173.8179, 1003.0234);
     SetPlayerInterior(targetid, 3);
 
     new str[144];
-    format(str, sizeof(str), "{FF0000}[Zatvor]: {FFFFFF}Admin %s je zatvorio igraca %s na %d min. Razlog: %s", Igrac[playerid][ImeIgraca], Igrac[targetid][ImeIgraca], vreme, razlog);
+    format(str, sizeof(str), "{FF0000}[ Server | Info ]: {FFFFFF}Admin %s je zatvorio igraca %s na %d min. Razlog: %s", Igrac[playerid][ImeIgraca], Igrac[targetid][ImeIgraca], vreme, razlog);
     SendClientMessageToAll(-1, str);
 
     new admin_query[128];
@@ -280,6 +358,11 @@ CMD:ajail(playerid, params[])
     LogAdminAction(playerid, targetid, "Zatvor(Jail)", razlog);
 
     return 1;
+}
+
+CMD:aduty(playerid, params[])
+{
+    return cmd_aduznost(playerid, params);
 }
 
 CMD:aduznost(playerid, params[])
@@ -294,20 +377,21 @@ CMD:aduznost(playerid, params[])
         SetPlayerArmour(playerid, 9999.9);
 
         new str[128];
-        format(str, sizeof(str), "{FF0000}[Admin Duznost] {FFFFFF}Administrator %s, se postavio na duznost", Igrac[playerid][ImeIgraca]);
+        format(str, sizeof(str), "{FF0000}[ Server | Info ] {FFFFFF}Administrator %s, se postavio na duznost", Igrac[playerid][ImeIgraca]);
         SendClientMessageToAll(-1, str);
 
         for(new i = 0; i < 20; i++) SendClientMessage(playerid, -1, " ");
-        SendClientMessage(playerid, -1, "{FF0000}[Admin Duznost] {FFFFFF}Sada ste na duznosti. Aktiviran vam je GOD MODE");
+        SendClientMessage(playerid, -1, "{FF0000}[ Server | Info ] {FFFFFF}Sada ste na duznosti. Aktiviran vam je GOD MODE");
+        SacuvajIgraca(playerid);
     }
     else
     {
         Igrac[playerid][AdminDuty] = false;
         SetPlayerColor(playerid, 0xFFFFFFFF);
         SetPlayerHealth(playerid, 100.0);
-
+        SacuvajIgraca(playerid);
         new str[128];
-        format(str, sizeof(str), "{FF0000}[Admin Duznost] Administrator %s, vise nije na duznosti", Igrac[playerid][ImeIgraca]);
+        format(str, sizeof(str), "{FF0000}[ Server | Info ] Administrator %s, vise nije na duznosti", Igrac[playerid][ImeIgraca]);
         SendClientMessageToAll(-1, str);
     }
     return 1;
@@ -320,13 +404,13 @@ CMD:postaviadmina(playerid, params[])
 
     new id, nivo;
     if(sscanf(params, "ui", id, nivo)) 
-        return SendClientMessage(playerid, -1, "Koristi: /postaviadmina [ID/Ime] [Nivo]");
+        return SendClientMessage(playerid, ADMIN_BOJA, "[ Admin System | Info ]: Koristi /postaviadmina [ID/Ime] [Nivo]");
 
     if(!IsPlayerConnected(id)) 
-        return SendClientMessage(playerid, -1, "[Admin System] Igrac nije na serveru!");
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Admin System | Greska ]: Igrac nije na serveru!");
 
     if(nivo < -1 || nivo > MAX_ADMIN_LEVEL) 
-        return SendClientMessage(playerid, -1, "[Admin System] Nevazeci nivo ( -1 do 6 )");
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Admin System | Greska ]: Nevazeci nivo ( -1 do 6 )");
 
     Igrac[id][Admin] = nivo;
     SacuvajIgraca(id);

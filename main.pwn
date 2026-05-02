@@ -1,3 +1,5 @@
+#pragma warning disable 239
+
 #include <a_samp>
 #include <a_mysql>
 #include <streamer>
@@ -11,12 +13,14 @@ new MySQL:g_SQL;
 #include "modules/definicije.pwn"
 #include "modules/items_base.pwn"
 #include "modules/accounts.pwn"
+#include "modules/banka.pwn"
 #include "modules/sistem.pwn"
 #include "modules/admin.pwn"
 #include "modules/inventory.pwn"
 #include "modules/tezge.pwn"
 #include "modules/house.pwn"
-#include "modules/banka.pwn"
+#include "modules/bankomat.pwn"
+#include "modules/poslovi.pwn"
 
 
 main()
@@ -26,8 +30,8 @@ main()
 
 public OnGameModeInit()
 {
-    print("DEBUG: Skripta je pokrenula OnGameModeInit");
-	g_SQL = mysql_connect("localhost", "root", "SampServer", "");
+    DisableInteriorEnterExits();
+    g_SQL = mysql_connect("127.0.0.1", "root", "", "SampServer");
 
 	if(mysql_errno(g_SQL) != 0) {
 		print("MySQL konekcija: Neuspela");
@@ -41,6 +45,11 @@ public OnGameModeInit()
 	SetTimer("AutoSaveTimer", 6000 * 5, true);
 	SetTimer("SekundarniTimer", 1000, true);
 	AddPlayerClass(0, 1682.0, -2334.0, 13.5, 0.0, 0, 0, 0, 0, 0, 0);
+
+    // Ucitavanje sistema
+    UcitajPointove();
+    UcitajBankomate();
+    UcitajPoslove();
 	return 1;
 }
 
@@ -53,6 +62,8 @@ public OnPlayerConnect(playerid)
 public OnPlayerSpawn(playerid)
 {
 	SetPlayerPos(playerid, 1682.0, -2334.0, 13.5);
+    SetPlayerVirtualWorld(playerid, 0);
+    SetPlayerInterior(playerid, 0);
 	return 1;
 }
 
@@ -62,6 +73,22 @@ public OnPlayerDisconnect(playerid, reason)
 		SacuvajIgraca(playerid);
 	}
 	return 1;
+}
+
+forward UcitajPointove();
+public UcitajPointove()
+{
+    // --- BANKA --- //
+    CreateDynamicPickup(BANKA_OTVARANJE_RACUNA_ICON, 1, BANKA_OTVARANJE_RACUNA_X, BANKA_OTVARANJE_RACUNA_Y, BANKA_OTVARANJE_RACUNA_Z, 0, 0, -1, 100.0);
+    CreateDynamic3DTextLabel(BANKA_OTVARANJE_RACUNA_LABEL, 0x00FF00FF, BANKA_OTVARANJE_RACUNA_X, BANKA_OTVARANJE_RACUNA_Y, BANKA_OTVARANJE_RACUNA_Z + 0.5, 30.0);
+    CreateDynamicPickup(BANKA_PODIZANJE_KARTICE_ICON, 1, BANKA_PODIZANJE_KARTICE_X, BANKA_PODIZANJE_KARTICE_Y, BANKA_PODIZANJE_KARTICE_Z, 0, 0, -1, 100.0);
+    CreateDynamic3DTextLabel(BANKA_PODIZANJE_KARTICE_LABEL, 0x00FF00FF, BANKA_PODIZANJE_KARTICE_X, BANKA_PODIZANJE_KARTICE_Y, BANKA_PODIZANJE_KARTICE_Z + 0.5, 30.0);
+
+    // --- OPSTINA --- //
+    CreateDynamicPickup(LICNA_KARTA_VADJENJE_ICON, 1, LICNA_KARTA_VADJENJE_X, LICNA_KARTA_VADJENJE_Y, LICNA_KARTA_VADJENJE_Z, 0, 0, -1, 100.0);
+    CreateDynamic3DTextLabel(LICNA_KARTA_VADJENJE_LABEL, 0x00FF00FF, LICNA_KARTA_VADJENJE_X, LICNA_KARTA_VADJENJE_Y, LICNA_KARTA_VADJENJE_Z + 0.5, 30.0);
+
+    return 1;
 }
 
 forward SekundarniTimer();
@@ -131,8 +158,31 @@ public OnPlayerText(playerid, text[])
     {
         new str[64];
         format(str, sizeof(str), "[ Server | Info ]: Ne mozete pricati jos %d min.", Igrac[playerid][ServerMuted]);
-        SendClientMessage(playerid, -1, str);
+        SendClientMessage(playerid, ERROR_BOJA, str);
         return 0;
     }
-    return 1;
+
+    // --- FORMATIRANJE CHATA --- //
+    new chatStr[144], ime[MAX_PLAYER_NAME], prefix[32];
+    GetPlayerName(playerid, ime, sizeof(ime));
+
+    if(Igrac[playerid][Admin] > 0)
+    {
+        format(prefix, sizeof(prefix), "[%s] ", DajAdminNaziv(Igrac[playerid][Admin]));
+    }
+    else prefix = "Igrac"; // Prazan string za obicne igrace
+
+    format(chatStr, sizeof(chatStr), "[%d] %s%s: %s", playerid, prefix, ime, text);
+
+    new Float:posX, Float:posY, Float:posZ;
+    GetPlayerPos(playerid, posX, posY, posZ);
+
+    foreach(new i : Player)
+    {
+        if(IsPlayerInRangeOfPoint(i, 20.0, posX, posY, posZ))
+        {
+            SendClientMessage(i, -1, chatStr);
+        }
+    }
+    return 0;
 }

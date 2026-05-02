@@ -15,6 +15,15 @@ enum IgracData {
     Float:Z,
     Float:R,
     ServerMuted,
+    LicnaKarta,
+    bool:obukaoUniformu,
+    zapoceoPosao,
+    pAktivniCP,
+    pPosaoFaza,
+    pPreostaloTura,
+    pUgovor,
+    pPosaoID,
+    bool:pRadiPosao,
     bool:LoggedIn
 };
 new Igrac[MAX_PLAYERS][IgracData];
@@ -24,20 +33,18 @@ hook OnPlayerConnect(playerid) {
     GetPlayerName(playerid, Igrac[playerid][ImeIgraca], 25);
 
     Igrac[playerid][LoggedIn] = false;
+    Igrac[playerid][IgracId] = -1;
     Igrac[playerid][Novac] = 0;
     Igrac[playerid][Level] = 1;
     Igrac[playerid][Skin] = 0;
-    Igrac[playerid][IgracId] = -1;
     Igrac[playerid][Admin] = -1;
     Igrac[playerid][AdminDuty] = false;
     Igrac[playerid][AdminVozilo] = -1;
-    Igrac[playerid][SlotoviInventara] = 0;
 
-    new queryna[128];
-    format(queryna, sizeof(queryna), "SELECT * FROM Igraci WHERE imeIgraca = '%s'", Igrac[playerid][ImeIgraca]);
-    mysql_tquery(g_SQL, queryna, "OnPlayerCheckAccount", "%d", playerid);
+    SetTimerEx("ProveriNalogTajmer", 500, false, "d", playerid);
     return 1;
 }
+
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
@@ -50,7 +57,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
             new Pquery[256];
             mysql_format(g_SQL, Pquery, sizeof(Pquery), 
-                "INSERT INTO Igraci (imeIgraca, lozinka, novac, level, skin, admin) VALUES ('%e', '%e', 0, 1, 0, -1)", 
+                "INSERT INTO Igraci (imeIgraca, lozinka, novac, level, skin, admin, slotoviInventara) VALUES ('%e', '%e', 0, 1, 0, -1, 3)", 
                 Igrac[playerid][ImeIgraca], inputtext);
             mysql_tquery(g_SQL, Pquery);
 
@@ -71,13 +78,25 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     return 1;
 }
 
+forward ProveriNalogTajmer(playerid);
+public ProveriNalogTajmer(playerid) {
+    new queryna[128];
+    mysql_format(g_SQL, queryna, sizeof(queryna), "SELECT * FROM `Igraci` WHERE `imeIgraca` = '%e' LIMIT 1", Igrac[playerid][ImeIgraca]);
+    printf("DEBUG: Saljem upit za %s", Igrac[playerid][ImeIgraca]);
+    mysql_tquery(g_SQL, queryna, "OnPlayerCheckAccount", "i", playerid);
+    return 1;
+}
+
 forward OnPlayerCheckAccount(playerid);
 public OnPlayerCheckAccount(playerid) {
-    
-    if(cache_num_rows() > 0) {
-        SPD(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "{00FFFF}Prijava", "Nalog je pronadjen.\nUnesite vasu sifru ispod", "Prijava", "Izlaz");
+    printf("DEBUG: Callback OnPlayerCheckAccount se uspesno pokrenuo za ID %d!", playerid);    
+    new rows = cache_num_rows();
+
+
+    if(rows > 0) {
+        ShowPlayerDialog(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "{00FFFF}Prijava", "Nalog je pronadjen.\nUnesite vasu sifru ispod", "Prijava", "Izlaz");
     } else {
-        SPD(playerid, D_REGISTER, DIALOG_STYLE_INPUT, "{00FF00}Registracija", "Nalog nije pronadjen.\nUnesite lozinku za registraciju", "Registracija", "Izlaz");   
+        ShowPlayerDialog(playerid, D_REGISTER, DIALOG_STYLE_INPUT, "{00FF00}Registracija", "Nalog nije pronadjen.\nUnesite lozinku za registraciju", "Registracija", "Izlaz");   
     }
     return 1;
 }
@@ -88,6 +107,7 @@ public OnPlayerLogin(playerid) {
     if(cache_num_rows() == 1) {
         
         UcitajIgraca(playerid);
+        UcitajBankovniRacun(playerid);
         GivePlayerMoney(playerid, Igrac[playerid][Novac]);
         SetPlayerScore(playerid, Igrac[playerid][Level]);
         SetSpawnInfo(playerid, NO_TEAM, Igrac[playerid][Skin], Igrac[playerid][X], Igrac[playerid][Y], Igrac[playerid][Z], Igrac[playerid][R], 0, 0, 0, 0, 0, 0);
@@ -95,45 +115,45 @@ public OnPlayerLogin(playerid) {
         SendClientMessage(playerid, -1, "Uspesno si se ulogovao");
     } else {
         SendClientMessage(playerid, -1, "Pogresna lozinka");
+        SPD(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "{00FFFF}Prijava", "Pogresna lozinka.\nUnesite vasu sifru ispod", "Prijava", "Izlaz");
     }
     return 1;
 }
 
-CMD:register(playerid, params[]) 
+
+CMD:izvadilicnu(playerid, params[])
 {
-    if(Igrac[playerid][LoggedIn]) return SendClientMessage(playerid, -1, "Greska: Vec si ulogovan!");
+    if(!IsPlayerInRangeOfPoint(playerid, LICNA_KARTA_VADJENJE_RADIUS, LICNA_KARTA_VADJENJE_X, LICNA_KARTA_VADJENJE_Y, LICNA_KARTA_VADJENJE_Z))
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Opstina | Greska ]: Niste na mestu za vadjenje licne karte!");
 
-    new lozinka[50];
-    if(sscanf(params, "s[50]", lozinka)) 
-        return SendClientMessage(playerid, -1, "Koristi: /register [lozinka]");
+    if(Igrac[playerid][LicnaKarta] == 1)
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Opstina | Greska ]: Vec imate licnu kartu.");
 
-    if(strlen(lozinka) < 4) 
-        return SendClientMessage(playerid, -1, "Greska: Lozinka mora imati bar 4 karaktera!");
 
-    new acc_query[256];
-    mysql_format(g_SQL, acc_query, sizeof(acc_query), 
-        "INSERT INTO Igraci (imeIgraca, lozinka, novac, level, skin, admin) VALUES ('%e', '%e', 0, 1, 0, -1)", 
-        Igrac[playerid][ImeIgraca], lozinka);
+    if(Igrac[playerid][Novac] < LICNA_KARTA_CENA)
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Opstina | Greska ]: Nemate dovoljno novca za vadjenje licne karte. Cena je 1000$.");
 
-    mysql_tquery(g_SQL, acc_query);
-    
-    SendClientMessage(playerid, -1, "Uspesno si se registrovao. Sada mozes koristiti /login [lozinka]");
+    Igrac[playerid][LicnaKarta] = 1;
+    GivePlayerMoney(playerid, (LICNA_KARTA_CENA) * -1);
+    SendClientMessage(playerid, -1, "[ Opstina | Info ]: Uspesno ste izvadili licnu kartu.");
+    SacuvajIgraca(playerid);
     return 1;
 }
 
-CMD:login(playerid, params[])
+CMD:licna(playerid, params[])
 {
-    if(Igrac[playerid][LoggedIn]) return SendClientMessage(playerid, -1, "Greska: Vec si ulogovan!");
+    if(Igrac[playerid][LicnaKarta] == 0)
+        return SendClientMessage(playerid, ERROR_BOJA, "[ Opstina | Greska ]: Nemate licnu kartu. Mozete je izvaditi na opstini.");
 
-    new lozinka[50];
-    if(sscanf(params, "s[50]", lozinka)) 
-        return SendClientMessage(playerid, -1, "Koristi: /login [lozinka]");
+    new info[128];
+    format(info, sizeof(info), "Ime: %s\nNovac: %d$\nLevel: %d\n", Igrac[playerid][ImeIgraca], Igrac[playerid][Novac], Igrac[playerid][Level]);
+    SendClientMessage(playerid, -1, info);
+    return 1;
+}
 
-    new acc_query[256];
-    mysql_format(g_SQL, acc_query, sizeof(acc_query), 
-        "SELECT * FROM Igraci WHERE imeIgraca='%e' AND lozinka='%e' LIMIT 1", 
-        Igrac[playerid][ImeIgraca], lozinka);
-
-    mysql_tquery(g_SQL, acc_query, "OnPlayerLogin", "d", playerid);
+CMD:dajpajser(playerid, params[])
+{
+    SendClientMessage(playerid, -1, "Dobili ste pajser.");
+    SpakujUInv(playerid, "Pajser", 1);
     return 1;
 }

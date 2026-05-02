@@ -155,6 +155,18 @@ stock SpakujUInv(playerid, const naziv[], kolicina)
     return 1;
 }
 
+stock ImaItemUInv(playerid, const naziv[])
+{
+    for(new i = 0; i < Igrac[playerid][SlotoviInventara]; i++)
+    {
+        if(IgracInventory[playerid][i][invId] != 0 && !strcmp(IgracInventory[playerid][i][InvIme], naziv))
+        {
+            return 1; // Ima item u inventaru
+        }
+    }
+    return 0; // Nema item u inventaru
+}
+
 stock OduzmiItem(playerid, const naziv[], kolicina)
 {
     for(new i = 0; i < MAX_INV_SLOTOVA; i++)
