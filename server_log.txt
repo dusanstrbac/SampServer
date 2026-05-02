@@ -1,0 +1,212 @@
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[03:43:59] 
+[03:43:59] Server Plugins
+[03:43:59] --------------
+[03:43:59]  Loading plugin: streamer
+[03:43:59] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[03:43:59]   Loaded.
+[03:43:59]  Loading plugin: mysql
+[03:43:59]   Failed.
+[03:43:59]  Loading plugin: crashdetect
+[03:43:59]   CrashDetect must be loaded before 'streamer.DLL'
+[03:43:59]   Failed.
+[03:43:59]  Loaded 1 plugins.
+
+[03:43:59] 
+[03:43:59] Filterscripts
+[03:43:59] ---------------
+[03:43:59]   Loaded 0 filterscripts.
+
+[03:43:59] Number of vehicle models: 0
+[03:44:12] --- Server Shutting Down.
+[03:44:12] 
+
+*** Streamer Plugin v2.9.6 by Incognito unloaded ***
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[03:46:02] 
+[03:46:02] Server Plugins
+[03:46:02] --------------
+[03:46:02]  Loading plugin: sscanf
+[03:46:02]   Failed.
+[03:46:02]  Loading plugin: streamer
+[03:46:02] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[03:46:02]   Loaded.
+[03:46:02]  Loading plugin: MySQL
+[03:46:02]   Failed.
+[03:46:02]  Loading plugin: streamer
+[03:46:02] [sampgdk:error] Error registering plugin: Invalid argument
+[03:46:02] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[03:46:02]   Failed.
+[03:46:02]  Loading plugin: mysql
+[03:46:02]   Failed.
+[03:46:02]  Loading plugin: crashdetect
+[03:46:02]   CrashDetect must be loaded before 'streamer.DLL'
+[03:46:02]   Failed.
+[03:46:02]  Loaded 1 plugins.
+
+[03:46:02] 
+[03:46:02] Filterscripts
+[03:46:02] ---------------
+[03:46:02]   Loaded 0 filterscripts.
+
+[03:46:02] Number of vehicle models: 0
+[03:47:18] --- Server Shutting Down.
+[03:47:18] 
+
+*** Streamer Plugin v2.9.6 by Incognito unloaded ***
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[03:48:33] 
+[03:48:33] Server Plugins
+[03:48:33] --------------
+[03:48:33]  Loading plugin: crashdetect
+[03:48:33]   CrashDetect plugin 4.21
+[03:48:33]   Loaded.
+[03:48:33]  Loading plugin: sscanf
+[03:48:33]   Failed.
+[03:48:33]  Loading plugin: streamer
+[03:48:33] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[03:48:33]   Loaded.
+[03:48:33]  Loading plugin: mysql
+[03:48:33]   Failed.
+[03:48:33]  Loading plugin: streamer
+[03:48:33] [sampgdk:error] Error registering plugin: Invalid argument
+[03:48:33] 
+
+*** Streamer Plugin v2.9.6 by Incognito loaded ***
+
+[03:48:33]   Failed.
+[03:48:33]  Loading plugin: mysql
+[03:48:33]   Failed.
+[03:48:33]  Loading plugin: crashdetect
+[03:48:33]   CrashDetect must be loaded before 'streamer.DLL'
+[03:48:33]   Failed.
+[03:48:33]  Loaded 2 plugins.
+
+[03:48:33] 
+[03:48:33] Filterscripts
+[03:48:33] ---------------
+[03:48:33]   Loaded 0 filterscripts.
+
+[03:48:33] Number of vehicle models: 0
+[03:49:07] [debug] Server received interrupt signal
+[03:49:08] [debug] Native backtrace:
+[03:49:08] [debug] #0 77ca951c in ?? () in C:\WINDOWS\SYSTEM32\ntdll.dll
+[03:49:08] [debug] #1 778b2d50 in ?? () in C:\WINDOWS\System32\KERNELBASE.dll
+[03:49:08] [debug] #2 778b2cef in ?? () in C:\WINDOWS\System32\KERNELBASE.dll
+[03:49:08] [debug] #3 0048d53c in ?? () in samp-server.exe
+[03:49:08] [debug] #4 00eca718 in ?? ()
+[03:49:08] [debug] #5 0049b531 in ?? () in samp-server.exe
+[03:49:08] [debug] #6 0049b541 in ?? () in samp-server.exe
+[03:49:08] --- Server Shutting Down.
+[03:49:08] 
+
+*** Streamer Plugin v2.9.6 by Incognito unloaded ***
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[03:55:41] 
+[03:55:41] Server Plugins
+[03:55:41] --------------
+[03:55:41]  Loaded 0 plugins.
+
+[03:55:41] 
+[03:55:41] Filterscripts
+[03:55:41] ---------------
+[03:55:41]   Loaded 0 filterscripts.
+
+[03:55:41] RP Server je pokrenut!
+[03:55:41] Number of vehicle models: 0
+[03:55:46] --- Server Shutting Down.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[04:16:42] 
+[04:16:42] Server Plugins
+[04:16:42] --------------
+[04:16:42]  Loading plugin: mysql
+[04:16:42]   Failed.
+[04:16:42]  Loaded 0 plugins.
+
+[04:16:42] 
+[04:16:42] Filterscripts
+[04:16:42] ---------------
+[04:16:42]   Loaded 0 filterscripts.
+
+[04:16:42] RP Server je pokrenut!
+[04:16:42] Number of vehicle models: 0
+[04:16:55] --- Server Shutting Down.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[04:17:03] 
+[04:17:03] Server Plugins
+[04:17:03] --------------
+[04:17:03]  Loading plugin: mysql
+[04:17:03]   Failed.
+[04:17:03]  Loaded 0 plugins.
+
+[04:17:03] 
+[04:17:03] Filterscripts
+[04:17:03] ---------------
+[04:17:03]   Loaded 0 filterscripts.
+
+[04:17:03] RP Server je pokrenut!
+[04:17:03] Number of vehicle models: 0
+[04:17:29] --- Server Shutting Down.
