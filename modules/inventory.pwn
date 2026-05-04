@@ -7,6 +7,53 @@ enum InvData {
 };
 new IgracInventory[MAX_PLAYERS][MAX_INV_SLOTOVA][InvData];
 
+hook OnPlayerSpawn(playerid)
+{
+    UcitajInventar(playerid);
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason)
+{
+    for(new i = 0; i < MAX_INV_SLOTOVA; i++)
+    {
+        IgracInventory[playerid][i][invId] = 0;
+        IgracInventory[playerid][i][InvKolicina] = 0;
+        IgracInventory[playerid][i][InvIme][0] = '\0'; // Brzi nacin za ciscenje stringa
+    }
+    return 1;
+}
+
+stock UcitajInventar(playerid)
+{
+    if(Igrac[playerid][IgracId] <= 0) return 0; // Sigurnosna provera
+
+    new query[128];
+    mysql_format(g_SQL, query, sizeof(query), "SELECT * FROM Inventar WHERE vlasnik_id = %d LIMIT %d", Igrac[playerid][IgracId], MAX_INV_SLOTOVA);
+    mysql_tquery(g_SQL, query, "OnInventarLoaded", "i", playerid);
+    return 1;
+}
+
+forward OnInventarLoaded(playerid);
+public OnInventarLoaded(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    new rows = cache_num_rows();
+    if(rows > 0)
+    {
+        for(new i = 0; i < rows && i < MAX_INV_SLOTOVA; i++)
+        {
+            cache_get_value_name_int(i, "id", IgracInventory[playerid][i][invId]);
+            cache_get_value_name(i, "predmet_ime", IgracInventory[playerid][i][InvIme], 50);
+            cache_get_value_name_int(i, "predmet_kolicina", IgracInventory[playerid][i][InvKolicina]);
+            
+            printf("[INV]: Ucitano %s (x%d) u slot %d za igraca %d", IgracInventory[playerid][i][InvIme], IgracInventory[playerid][i][InvKolicina], i, playerid);
+        }
+    }
+    return 1;
+}
+
 CMD:inventory(playerid, params[])
 {
     if(!Igrac[playerid][LoggedIn]) return 1;

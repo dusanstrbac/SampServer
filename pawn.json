@@ -13,11 +13,9 @@
         "Y-Less/sscanf:v2.11.4"
     ],
     "runtime": {
-        "plugins": [
-            "crashdetect",
-            "mysql",
-            "sscanf",
-            "streamer"
-        ]
+        "port": 25565,
+        "lanmode": false,
+        "announce": true,
+        "query": true
     }
 }

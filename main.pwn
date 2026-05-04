@@ -21,7 +21,7 @@ new MySQL:g_SQL;
 #include "modules/house.pwn"
 #include "modules/bankomat.pwn"
 #include "modules/poslovi.pwn"
-
+#include "modules/ilegala.pwn"
 
 main()
 {
@@ -50,6 +50,7 @@ public OnGameModeInit()
     UcitajPointove();
     UcitajBankomate();
     UcitajPoslove();
+    UcitajIlegaluSistem();
 	return 1;
 }
 

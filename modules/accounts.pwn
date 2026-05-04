@@ -108,11 +108,18 @@ public OnPlayerLogin(playerid) {
         
         UcitajIgraca(playerid);
         UcitajBankovniRacun(playerid);
+        UcitajInventar(playerid); 
+
+        Igrac[playerid][LoggedIn] = true;
+        
         GivePlayerMoney(playerid, Igrac[playerid][Novac]);
         SetPlayerScore(playerid, Igrac[playerid][Level]);
+        
+        // Postavljanje pozicije i spawnovanje
         SetSpawnInfo(playerid, NO_TEAM, Igrac[playerid][Skin], Igrac[playerid][X], Igrac[playerid][Y], Igrac[playerid][Z], Igrac[playerid][R], 0, 0, 0, 0, 0, 0);
         SpawnPlayer(playerid);
-        SendClientMessage(playerid, -1, "Uspesno si se ulogovao");
+        
+        SendClientMessage(playerid, -1, "Uspesno si se ulogovao. Inventar je ucitan.");
     } else {
         SendClientMessage(playerid, -1, "Pogresna lozinka");
         SPD(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "{00FFFF}Prijava", "Pogresna lozinka.\nUnesite vasu sifru ispod", "Prijava", "Izlaz");

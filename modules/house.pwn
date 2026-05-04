@@ -765,8 +765,11 @@ CMD:kuca(playerid, params[])
     if(house_idx == -1) 
         return SendClientMessage(playerid, -1, "{FF0000}[ House System | Greska ]: {FFFFFF}Niste vlasnik kuce!");
 
-    if(!IsPlayerInRangeOfPoint(playerid, 5.0, Kuca[house_idx][kUlazX], Kuca[house_idx][kUlazY], Kuca[house_idx][kUlazZ]) || !IsPlayerInRangeOfPoint(playerid, 50.0, Kuca[house_idx][kIzlazX], Kuca[house_idx][kIzlazY], Kuca[house_idx][kIzlazZ]))
-        return SendClientMessage(playerid, -1, "{FF0000}[ House System | Greska ]: {FFFFFF}Morate biti blizu svoje kuce ili u kuci da biste koristili meni!");
+    if(!IsPlayerInRangeOfPoint(playerid, 5.0, Kuca[house_idx][kUlazX], Kuca[house_idx][kUlazY], Kuca[house_idx][kUlazZ]) && 
+        !IsPlayerInRangeOfPoint(playerid, 50.0, Kuca[house_idx][kIzlazX], Kuca[house_idx][kIzlazY], Kuca[house_idx][kIzlazZ]))
+    {
+    return SendClientMessage(playerid, -1, "{FF0000}[ House System | Greska ]: {FFFFFF}Morate biti ispred ili unutar svoje kuce!");
+    }
 
     new menuStr[64], str[256];
     format(menuStr, sizeof(menuStr), "{0080FF}Menu kuce ID: %d", Kuca[house_idx][kId]);

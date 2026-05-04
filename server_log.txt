@@ -210,3 +210,32 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [04:17:03] RP Server je pokrenut!
 [04:17:03] Number of vehicle models: 0
 [04:17:29] --- Server Shutting Down.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[16:01:00] 
+[16:01:00] Server Plugins
+[16:01:00] --------------
+[16:01:00]  Loading plugin: plugins
+[16:01:00]   Failed.
+[16:01:00]  Loading plugin: mysql
+[16:01:03]   Failed.
+[16:01:03]  Loading plugin: sscanf
+[16:01:03]   Failed.
+[16:01:03]  Loading plugin: streamer
+[16:01:03]   Failed.
+[16:01:03]  Loaded 0 plugins.
+
+[16:01:03] 
+[16:01:03] Filterscripts
+[16:01:03] ---------------
+[16:01:03]   Loaded 0 filterscripts.
+
+[16:01:03] Script[gamemodes/main.amx]: Run time error 19: "File or function is not found"
+[16:01:03] Number of vehicle models: 0
