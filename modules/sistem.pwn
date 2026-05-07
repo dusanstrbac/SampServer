@@ -24,11 +24,11 @@ stock SacuvajIgraca(playerid)
 
     new sys_query[512];
     mysql_format(g_SQL, sys_query, sizeof(sys_query),
-        "UPDATE Igraci SET novac=%d, level=%d, skin=%d, zatvorVreme=%d, admin=%d, adminDuty=%d, slotoviInventara=%d, x=%f, y=%f, z=%f, r=%f, serverMuted=%d, licnaKarta=%d, ugovor=%d, posao=%d WHERE id=%d",
+        "UPDATE Igraci SET novac=%d, level=%d, skin=%d, zatvorVreme=%d, admin=%d, adminDuty=%d, slotoviInventara=%d, x=%f, y=%f, z=%f, r=%f, serverMuted=%d, licnaKarta=%d, ugovor=%d, posao=%d, Telefon=%d, telefonKredit=%d, telfonBroj=%d WHERE id=%d",
         Igrac[playerid][Novac], Igrac[playerid][Level], Igrac[playerid][Skin], Igrac[playerid][ZatvorVreme], Igrac[playerid][Admin], Igrac[playerid][AdminDuty], Igrac[playerid][SlotoviInventara], 
         Igrac[playerid][X], Igrac[playerid][Y], Igrac[playerid][Z], Igrac[playerid][R], Igrac[playerid][ServerMuted], Igrac[playerid][LicnaKarta], 
-        Igrac[playerid][pUgovor], // Promenjeno sa PosaoData
-        Igrac[playerid][pPosaoID], // Promenjeno sa PosaoData
+        Igrac[playerid][pUgovor],
+        Igrac[playerid][pPosaoID], Igrac[playerid][Telefon], Igrac[playerid][TelefonKredit], Igrac[playerid][TelefonBroj],
         Igrac[playerid][IgracId]
     );
 
@@ -56,6 +56,10 @@ stock UcitajIgraca(playerid)
     cache_get_value_name_int(0, "licnaKarta", Igrac[playerid][LicnaKarta]);
     cache_get_value_name_int(0, "ugovor", Igrac[playerid][pUgovor]);
     cache_get_value_name_int(0, "posao", Igrac[playerid][pPosaoID]);
+
+    cache_get_value_name_int(0, "Telefon", Igrac[playerid][Telefon]);
+    cache_get_value_name_int(0, "telefonKredit", Igrac[playerid][TelefonKredit]);
+    cache_get_value_name_int(0, "telfonBroj", Igrac[playerid][TelefonBroj]);
 
     Igrac[playerid][LoggedIn] = true;
 

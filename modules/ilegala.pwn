@@ -3,7 +3,7 @@
 #define MAX_DILERA          50
 #define D_ADILER_MAIN       5556
 #define D_ILEGALA_MENU      5557
-#define VREME_PROMENE       2 // 2 minuta
+#define VREME_PROMENE       30 // 30 minuta
 
 #define CENA_SEME_MARIHUANE     250
 #define CENA_ZIP_KESICA         50

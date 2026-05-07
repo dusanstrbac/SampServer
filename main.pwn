@@ -22,6 +22,8 @@ new MySQL:g_SQL;
 #include "modules/bankomat.pwn"
 #include "modules/poslovi.pwn"
 #include "modules/ilegala.pwn"
+#include "modules/farming.pwn"
+#include "modules/igrac.pwn"
 
 main()
 {
@@ -51,6 +53,7 @@ public OnGameModeInit()
     UcitajBankomate();
     UcitajPoslove();
     UcitajIlegaluSistem();
+    mysql_tquery(g_SQL, "SELECT * FROM Biljke", "UcitajSveBiljke");
 	return 1;
 }
 
@@ -152,8 +155,41 @@ public SekundarniTimer()
     return 1;
 }
 
+forward ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5);
+public ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5)
+{
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    new Float:posx, Float:posy, Float:posz;
+    GetPlayerPos(playerid, posx, posy, posz);
+
+    new Float:dist;
+    new vw = GetPlayerVirtualWorld(playerid);
+    new intid = GetPlayerInterior(playerid);
+
+    foreach(new i : Player)
+    {
+        // DODATO: Ako je 'i' zapravo igrač koji priča, preskoči ga da mu ne duplira poruku
+        if(i == playerid) continue; 
+
+        if(IsPlayerConnected(i) && GetPlayerVirtualWorld(i) == vw && GetPlayerInterior(i) == intid)
+        {
+            dist = GetPlayerDistanceFromPoint(i, posx, posy, posz);
+            if(dist < radi / 16) SendClientMessage(i, col1, string);
+            else if(dist < radi / 8) SendClientMessage(i, col2, string);
+            else if(dist < radi / 4) SendClientMessage(i, col3, string);
+            else if(dist < radi / 2) SendClientMessage(i, col4, string);
+            else if(dist < radi) SendClientMessage(i, col5, string);
+        }
+    }
+    return 1;
+}
+
 public OnPlayerText(playerid, text[])
 {
+    // Ukoliko je igrac na pozivu sa nekim, ne dozvoljavamo mu da koristi chat dok je u pozivu i nece se formatirati poruka
+    if(NaVeziSa[playerid] != INVALID_PLAYER_ID) return 0; 
+
     // --- UKOLIKO JE IGRAC MUTIRAN --- //
     if(Igrac[playerid][ServerMuted] > 0)
     {
@@ -171,7 +207,7 @@ public OnPlayerText(playerid, text[])
     {
         format(prefix, sizeof(prefix), "[%s] ", DajAdminNaziv(Igrac[playerid][Admin]));
     }
-    else prefix = "Igrac"; // Prazan string za obicne igrace
+    else prefix = ""; // Bolje ostaviti prazno za igrace nego da pise "Igrac" ispred svakog
 
     format(chatStr, sizeof(chatStr), "[%d] %s%s: %s", playerid, prefix, ime, text);
 
@@ -180,10 +216,17 @@ public OnPlayerText(playerid, text[])
 
     foreach(new i : Player)
     {
-        if(IsPlayerInRangeOfPoint(i, 20.0, posX, posY, posZ))
+        // Koristimo virtual world i interior proveru da se chat ne bi mesao kroz zidove/svetove
+        if(GetPlayerVirtualWorld(i) == GetPlayerVirtualWorld(playerid) && GetPlayerInterior(i) == GetPlayerInterior(playerid))
         {
-            SendClientMessage(i, -1, chatStr);
+            if(IsPlayerInRangeOfPoint(i, 20.0, posX, posY, posZ))
+            {
+                SendClientMessage(i, -1, chatStr);
+            }
         }
     }
+    
+    // Obavezno return 0 ovde jer si vec rucno poslao poruku preko SendClientMessage
+    // Ako ostavis 1, SA-MP ce poslati i trecu, sistemsku poruku.
     return 0;
 }

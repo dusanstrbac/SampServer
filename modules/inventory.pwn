@@ -54,6 +54,11 @@ public OnInventarLoaded(playerid)
     return 1;
 }
 
+CMD:inv(playerid, params[])
+{
+    return cmd_inventory(playerid, params);
+}
+
 CMD:inventory(playerid, params[])
 {
     if(!Igrac[playerid][LoggedIn]) return 1;
@@ -191,7 +196,11 @@ stock SpakujUInv(playerid, const naziv[], kolicina)
                 break;
             }
         }
-        if(prazanSlot == -1) return SendClientMessage(playerid, -1, "{FF0000}[Greska | Inventory System] {FFFFFF}Nemate slobodnih slotova! Kupite ranac.");
+        if(prazanSlot == -1) 
+        {
+            SendClientMessage(playerid, -1, "{FF0000}[Greska] {FFFFFF}Nemate slobodnih slotova!");
+            return 0;
+        }
 
         IgracInventory[playerid][prazanSlot][InvKolicina] = kolicina;
         format(IgracInventory[playerid][prazanSlot][InvIme], 50, "%s", naziv);

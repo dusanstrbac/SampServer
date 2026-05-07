@@ -80,41 +80,42 @@ public OnATMInsert(atmid) {
 
 hook OnPlayerEditDynObj@ATM(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
-    if(GetPVarInt(playerid, "KreiraNoviATM") == 1)
+    // Ako PVar ne postoji, ODMAH vrati 0 (ili 1 zavisno od verzije, ali 0 je sigurnije za chain) 
+    // kako bi drugi hook-ovi mogli da provere svoje PVare
+    if(GetPVarInt(playerid, "KreiraNoviATM") != 1) return 0; 
+
+    if(response == EDIT_RESPONSE_FINAL)
     {
-        if(response == EDIT_RESPONSE_FINAL)
-        {
-            new id = GetPVarInt(playerid, "ATM_SlotID");
+        new id = GetPVarInt(playerid, "ATM_SlotID");
 
-            ATM[id][atmX] = x;
-            ATM[id][atmY] = y;
-            ATM[id][atmZ] = z;
-            ATM[id][atmR] = rz;
-            ATM[id][atmObjekat] = objectid;
+        ATM[id][atmX] = x;
+        ATM[id][atmY] = y;
+        ATM[id][atmZ] = z;
+        ATM[id][atmR] = rz;
+        ATM[id][atmObjekat] = objectid;
 
-            new query[256];
-            mysql_format(g_SQL, query, sizeof(query), 
-                "INSERT INTO bankomati (x, y, zr, r) VALUES (%f, %f, %f, %f)", 
-                x, y, z, rz);
-            mysql_tquery(g_SQL, query, "OnATMInsert", "i", id);
+        new query[256];
+        mysql_format(g_SQL, query, sizeof(query), 
+            "INSERT INTO bankomati (x, y, z, r) VALUES (%f, %f, %f, %f)", 
+            x, y, z, rz);
+        mysql_tquery(g_SQL, query, "OnATMInsert", "i", id);
 
-            new labelStr[128];
-            format(labelStr, sizeof(labelStr), ""TEXT_ZELENA"[ Bankomat ID: %d ]\n{FFFFFF}Koristite 'H'\nda pristupite bankomatu", id);
-            ATM[id][atmLabel] = CreateDynamic3DTextLabel(labelStr, -1, x, y, z + 1.2, 10.0);
+        new labelStr[128];
+        format(labelStr, sizeof(labelStr), ""TEXT_ZELENA"[ Bankomat ID: %d ]\n{FFFFFF}Koristite 'H'\nda pristupite bankomatu", id);
+        ATM[id][atmLabel] = CreateDynamic3DTextLabel(labelStr, -1, x, y, z + 1.2, 10.0);
 
-            DeletePVar(playerid, "KreiraNoviATM");
-            DeletePVar(playerid, "ATM_SlotID");
-            SendClientMessage(playerid, ADMIN_BOJA, "[ Bankomat System | Admin ]: Bankomat uspesno kreiran i sacuvan u bazi.");
-        }
-        else if(response == EDIT_RESPONSE_CANCEL)
-        {
-            DestroyDynamicObject(objectid);
-            DeletePVar(playerid, "KreiraNoviATM");
-            DeletePVar(playerid, "ATM_SlotID");
-            SendClientMessage(playerid, ERROR_BOJA, "[ Bankomat System ]: Kreiranje bankomata otkazano.");
-        }
+        DeletePVar(playerid, "KreiraNoviATM");
+        DeletePVar(playerid, "ATM_SlotID");
+        SendClientMessage(playerid, ADMIN_BOJA, "[ Bankomat System | Admin ]: Bankomat uspesno kreiran i sacuvan u bazi.");
     }
-    return 1;
+    else if(response == EDIT_RESPONSE_CANCEL)
+    {
+        DestroyDynamicObject(objectid);
+        DeletePVar(playerid, "KreiraNoviATM");
+        DeletePVar(playerid, "ATM_SlotID");
+        SendClientMessage(playerid, ERROR_BOJA, "[ Bankomat System ]: Kreiranje bankomata otkazano.");
+    }
+    return 1; // Vraćamo 1 jer smo ovde zavšili obradu bankomata
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)

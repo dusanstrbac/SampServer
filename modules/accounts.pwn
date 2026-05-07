@@ -24,7 +24,10 @@ enum IgracData {
     pUgovor,
     pPosaoID,
     bool:pRadiPosao,
-    bool:LoggedIn
+    bool:LoggedIn,
+    Telefon,
+    TelefonKredit,
+    TelefonBroj,
 };
 new Igrac[MAX_PLAYERS][IgracData];
 
@@ -40,11 +43,11 @@ hook OnPlayerConnect(playerid) {
     Igrac[playerid][Admin] = -1;
     Igrac[playerid][AdminDuty] = false;
     Igrac[playerid][AdminVozilo] = -1;
+    Igrac[playerid][SlotoviInventara] = 3;
 
     SetTimerEx("ProveriNalogTajmer", 500, false, "d", playerid);
     return 1;
 }
-
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
